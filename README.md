@@ -1,10 +1,9 @@
-# audio_processing
+# Unsupervised Sound Anomaly Detection Benchmark Suite
 
-An educational, modular **unsupervised sound anomaly detection** system built on the [MIMII dataset](https://zenodo.org/record/3384388).
-
-The pipeline reads WAV recordings of industrial machines, splits them into fixed-length overlapping frames, extracts log-mel spectrogram features, and feeds them into an autoencoder. Reconstruction error at inference time is used as an anomaly score.
-
-> **Status** — all modules (`data/`, `features/`, `models/`, `training/`, `inference/`, `evaluation/`) are fully implemented and tested.
+A benchmark suite for unsupervised sound anomaly detection consisting of:
+* Data mapped into a common format
+* Common evaluation metrics and principled train-test splits.
+* Common baseline model.
 
 ---
 
