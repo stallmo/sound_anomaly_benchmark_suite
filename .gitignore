@@ -1,0 +1,38 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv/
+
+# Python tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.coverage
+coverage.xml
+htmlcov/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data & ML artifacts
+audio_data/
+checkpoints/
+wandb/
+*.pt
+*.log
+
+# IDE & OS
+.idea/
+.DS_Store
+
+# Project-specific non-essentials
+uv.lock
+.python-version
+AGENTS.md

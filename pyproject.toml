@@ -1,0 +1,65 @@
+[project]
+name = "audio-processing"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "ipykernel>=7.2.0",
+    "jupyter>=1.1.1",
+    "librosa>=0.11.0",
+    "matplotlib>=3.10.8",
+    "numpy>=2.4.3",
+    "platformdirs>=4.9.4",
+    "scikit-learn>=1.8.0",
+    "scipy>=1.17.1",
+    "sounddevice>=0.5.5",
+    "torch>=2.11.0",
+    "torchaudio>=2.11.0",
+    "torchcodec>=0.11.1",
+    "tqdm>=4.67.3",
+    "wandb>=0.25.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]
+
+[tool.dcase-baseline]
+# ── required: dataset ─────────────────────────────────────────────────────
+dataset        = "mimii" # "mimii_due", "mimii"
+entity_id      = "id_00,id_02" # comma-separated list of entity IDs to use (e.g. "id_00,id_02") or "all"
+# ── data / experiment ─────────────────────────────────────────────────────
+data_dir        = "audio_data/mimii" # path to dataset root (contains "mimii_due" and/or "mimii" subdirs)
+entity_type     = "fan" # "fan", "pump", "valve", "slider"
+checkpoint_dir  = "checkpoints"
+seed            = 42
+mode            = "combined" # "combined" or "per_entity"
+per_entity_eval = true
+noise_level_db  = -6   # MIMII SNR levels: -6, 0, 6 (ignored if not applicable, e.g. MIMII DUE)
+
+# ── signal pre-processing ─────────────────────────────────────────────────
+# "harmonic" or "percussive" → apply HPSS and keep that component.
+# "" (empty) → use the entity-type default from features.hpss.ENTITY_TYPE_COMPONENT
+# "none"     → disable HPSS entirely (raw signal).
+hpss_component  = "none"  # entity-type default
+
+# "" / omitted → use DEFAULT_MEL_CACHE_DIR (platform cache).
+# "none"        → disable caching (always recompute).
+# any path      → use that directory.
+# mel_cache_dir = "none"
+
+# ── model / training (DCASE baseline defaults) ────────────────────────────
+epochs         = 100
+lr             = 1e-3
+weight_decay   = 0.0
+batch_size     = 512
+hidden_dims    = "128,128,128,128"
+bottleneck_dim = 32
+n_mels         = 64
+n_fft          = 1024
+mel_hop_length = 512
+n_frames       = 5
+sample_rate    = 16_000
+max_fpr        = 0.1   # maximum false-positive rate for partial AUC-ROC
