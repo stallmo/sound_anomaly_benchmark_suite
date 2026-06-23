@@ -19,6 +19,7 @@ coverage.xml
 htmlcov/
 
 # Jupyter
+*.ipynb
 .ipynb_checkpoints/
 
 # Data & ML artifacts
