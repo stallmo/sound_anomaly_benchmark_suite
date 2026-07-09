@@ -64,6 +64,7 @@ audio_processing/
 ├── exploration/                 # Jupyter notebooks
 │   ├── eda.ipynb                # Exploratory data analysis
 │   ├── load_data.ipynb          # Data pipeline walkthrough
+│   ├── dataset_quality_metrics.ipynb  # Per-file quality metrics + histograms
 │   └── sound_anomaly_model.ipynb
 │
 ├── tests/                       # pytest test suite
@@ -140,7 +141,7 @@ All tests should pass.
 
 ## Dataset
 
-This project supports two MIMII variants. Run the download script to fetch and preprocess both:
+This project supports three datasets: two MIMII variants and the Respiratory Sound Database. Run the download script to fetch and preprocess them:
 
 ```bash
 python download_dataset.py
@@ -174,7 +175,23 @@ MIMII with domain shifts due to changes in operational and environmental conditi
 | Channels | 1 (already mono) |
 | Sample rate | 16 000 Hz |
 
-Both datasets are placed in the canonical layout after preprocessing:
+### Respiratory Sound Database
+
+Breathing-cycle recordings labelled by crackle/wheeze presence. Each raw recording is sliced into one WAV file per breathing cycle using the accompanying annotation file; a cycle is abnormal if it contains a **wheeze** (with or without an accompanying crackle), otherwise it's normal.
+
+**Kaggle**: https://www.kaggle.com/datasets/vbookshelf/respiratory-sound-database (requires Kaggle API credentials — `KAGGLE_API_TOKEN` env var, `~/.kaggle/access_token`, or `KAGGLE_USERNAME`/`KAGGLE_KEY`/`kaggle.json`)
+
+| Property | Value |
+|---|---|
+| Machine types | respiratory_sounds (single type; recording equipment plays the role of machine ID) |
+| Machine IDs | AKGC417L, LittC2SE, Litt3200, Meditron |
+| Channels | 1 (mixed down to mono during preprocessing) |
+| Sample rate | native per equipment (4 000 – 44 100 Hz) — unlike MIMII/MIMII DUE's uniform 16 000 Hz |
+| Duration per file | one breathing cycle (~1–20 seconds, varies) |
+
+Unlike MIMII/MIMII DUE, files are stored at their native sample rate rather than a uniform 16 kHz. `data.loader.load_wav` itself does *not* resample by default (`target_samplerate=None` keeps the native rate) — resampling to a uniform rate (16 000 Hz by default) happens one layer up, in `MelFrameDataset`/`AudioFrameDataset` (`data/dataset.py`), which pass `target_samplerate=self.sample_rate` down to `load_wav` on every file access. So any dataset with mixed native rates is transparently normalized as long as it's consumed through those classes — as the DCASE runner does.
+
+All three datasets are placed in the canonical layout after preprocessing:
 
 ```
 audio_data/
@@ -570,5 +587,6 @@ Then select **audio-processing** as the kernel inside JupyterLab / VS Code.
 |---|---|
 | `eda.ipynb` | Waveform visualisation, Fourier transforms, mel spectrograms |
 | `load_data.ipynb` | Full data pipeline walkthrough using `AudioFrameDataset` |
+| `dataset_quality_metrics.ipynb` | Per-file spectral flatness, RMS, spectral entropy, and dynamic range for any canonical dataset, with histograms split by entity ID |
 | `sound_anomaly_model.ipynb` | Autoencoder training and anomaly scoring (in progress) |
 
