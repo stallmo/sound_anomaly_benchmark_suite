@@ -145,7 +145,7 @@ def _build_parser() -> argparse.ArgumentParser:
         default="per-entity",
         help=(
             "Experiment mode. "
-            "'per-entity' trains one model per entity ID (default). "
+            "'per-entity' trains one model per entity ID. "
             "'combined' trains a single model on the merged data from all supplied IDs."
         ),
     )
