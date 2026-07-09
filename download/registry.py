@@ -25,6 +25,12 @@ from __future__ import annotations
 from download.mimii import MimiiDownloader, MimiiPreprocessor
 from download.mimii_due import MimiiDueDownloader, MimiiDuePreprocessor
 from download.protocol import DatasetInfo
+from download.respiratory_sound_database import (
+    RESPIRATORY_SOUNDS_ENTITY_IDS,
+    RESPIRATORY_SOUNDS_ENTITY_TYPE,
+    RespiratorySoundDatabaseDownloader,
+    RespiratorySoundDatabasePreprocessor,
+)
 
 
 #: All registered datasets, keyed by their CLI slug.
@@ -51,6 +57,18 @@ DATASET_REGISTRY: dict[str, DatasetInfo] = {
         entity_ids=["id_00", "id_01", "id_02", "id_03", "id_04", "id_05"],
         downloader=MimiiDueDownloader(),
         preprocessor=MimiiDuePreprocessor(),
+    ),
+    "respiratory_sound_database": DatasetInfo(
+        name="respiratory_sound_database",
+        description=(
+            "Respiratory Sound Database: breathing-cycle recordings labelled by "
+            "crackle/wheeze presence (Kaggle, vbookshelf/respiratory-sound-database). "
+            "A cycle is abnormal if it contains a wheeze, with or without a crackle."
+        ),
+        entity_types=[RESPIRATORY_SOUNDS_ENTITY_TYPE],
+        entity_ids=RESPIRATORY_SOUNDS_ENTITY_IDS,
+        downloader=RespiratorySoundDatabaseDownloader(),
+        preprocessor=RespiratorySoundDatabasePreprocessor(),
     ),
 }
 

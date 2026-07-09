@@ -125,7 +125,7 @@ def ensure_data(
     )
 
     # only set noise level if it is available for the dataset
-    if noise_level_db is not None:
+    if effective_noise_level is not None:
         info.downloader.set_noise_levels_db([effective_noise_level])
         info.downloader.set_entity_types([entity_type])
 
