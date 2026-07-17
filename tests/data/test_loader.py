@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from data.loader import (
+from audio_processing.data.loader import (
     AudioFile1D,
     find_wav_files,
     load_wav,

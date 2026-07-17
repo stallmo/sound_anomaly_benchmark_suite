@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from data.framing import count_frames, frame_signal
+from audio_processing.data.framing import count_frames, frame_signal
 
 
 # ── frame_signal ──────────────────────────────────────────────────────────

@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 import torch
 
-from models.autoencoder import Autoencoder
+from audio_processing.models.autoencoder import Autoencoder
 
 # ── test-local constants ──────────────────────────────────────────────────
 INPUT_DIM = 128           # arbitrary feature vector size

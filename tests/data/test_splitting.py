@@ -6,9 +6,9 @@ from pathlib import Path
 
 import pytest
 
-from data.dataset import AudioFrameDataset
-from data.loader import find_wav_files, parse_label_from_path
-from data.splitting import DataSplit, make_train_test_split
+from audio_processing.data.dataset import AudioFrameDataset
+from audio_processing.data.loader import find_wav_files, parse_label_from_path
+from audio_processing.data.splitting import DataSplit, make_train_test_split
 from tests.conftest import SAMPLE_RATE, _make_wav
 
 # ── helpers ───────────────────────────────────────────────────────────────
@@ -128,7 +128,7 @@ class TestAudioFrameDatasetFromFilePaths:
         assert len(ds) > 0
 
     def test_len_matches_expected_frame_count(self, mimii_dir):
-        from data.framing import count_frames
+        from audio_processing.data.framing import count_frames
         import soundfile as sf
 
         split = make_train_test_split(mimii_dir, seed=0)

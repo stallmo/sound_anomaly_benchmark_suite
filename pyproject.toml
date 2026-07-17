@@ -33,17 +33,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = [
-    "src/data",
-    "src/download",
-    "src/evaluation",
-    "src/features",
-    "src/inference",
-    "src/models",
-    "src/tracking",
-    "src/training",
-    "src/utilities",
-]
+packages = ["src/audio_processing"]
 
 [tool.dcase-baseline]
 # ── required: dataset ─────────────────────────────────────────────────────

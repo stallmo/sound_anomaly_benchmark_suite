@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from features.hpss import (
+from audio_processing.features.hpss import (
     ENTITY_TYPE_COMPONENT,
     HpssTransform,
     SignalTransform,

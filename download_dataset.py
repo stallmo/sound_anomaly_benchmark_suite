@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from utilities.paths import DEFAULT_DATA_DIR
-from download import mimii, mimii_due
+from audio_processing.utilities.paths import DEFAULT_DATA_DIR
+from audio_processing.download import mimii, mimii_due
 
 if __name__ == "__main__":
 

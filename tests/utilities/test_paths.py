@@ -15,7 +15,7 @@ from pathlib import Path
 
 import pytest
 
-from utilities.paths import effective_data_dir
+from audio_processing.utilities.paths import effective_data_dir
 
 
 BASE = Path("audio_data/downmixed")

@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from inference.detector import AnomalyDetector, AnomalyResult
+from audio_processing.inference.detector import AnomalyDetector, AnomalyResult
 
 
 # ── fixtures ──────────────────────────────────────────────────────────────

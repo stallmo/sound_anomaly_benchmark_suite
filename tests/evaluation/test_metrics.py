@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from evaluation.metrics import EvaluationResult, compute_auc_roc, compute_metrics
+from audio_processing.evaluation.metrics import EvaluationResult, compute_auc_roc, compute_metrics
 
 # ── shared fixtures ───────────────────────────────────────────────────────
 

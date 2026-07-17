@@ -7,10 +7,10 @@ from pathlib import Path
 import pytest
 from torch.utils.data import Dataset
 
-from models.autoencoder import Autoencoder
-from inference.aggregation import mean_score
-from inference.frame_scorer import ReconstructionFrameScorer
-from inference.file_scorer import FileScorer, make_mel_dataset_factory
+from audio_processing.models.autoencoder import Autoencoder
+from audio_processing.inference.aggregation import mean_score
+from audio_processing.inference.frame_scorer import ReconstructionFrameScorer
+from audio_processing.inference.file_scorer import FileScorer, make_mel_dataset_factory
 
 # ── test-local constants ──────────────────────────────────────────────────
 # Small values so tests stay fast with synthetic 1-second WAV files.

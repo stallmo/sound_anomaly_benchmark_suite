@@ -6,7 +6,7 @@ import pytest
 import torch
 from torch import Tensor
 
-from inference.aggregation import AggregationFn, max_score, mean_score, percentile_score
+from audio_processing.inference.aggregation import AggregationFn, max_score, mean_score, percentile_score
 
 
 # ── fixtures ──────────────────────────────────────────────────────────────

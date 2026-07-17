@@ -8,9 +8,9 @@ import pytest
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 
-from models.autoencoder import Autoencoder
-from training.config import TrainingConfig
-from training.trainer import PtTrainer
+from audio_processing.models.autoencoder import Autoencoder
+from audio_processing.training.config import TrainingConfig
+from audio_processing.training.trainer import PtTrainer
 from tests.training.test_tracking import SpyTracker
 
 # ── test-local constants ──────────────────────────────────────────────────

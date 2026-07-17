@@ -25,35 +25,41 @@ A benchmark suite for unsupervised sound anomaly detection consisting of:
 ```
 audio_processing/
 │
-├── data/                        # Audio loading, framing, splitting, dataset
-│   ├── loader.py                # load_wav, find_wav_files, path parsers
-│   ├── framing.py               # frame_signal, count_frames
-│   ├── dataset.py               # AudioFrameDataset (PyTorch Dataset)
-│   └── splitting.py             # make_train_test_split, DataSplit
-│
-├── features/                    # Feature extraction
-│   ├── log_mel.py               # MelSpectrogramTransform
-│   └── hpss.py                  # HpssTransform, hpss_harmonic, hpss_percussive
-│
-├── models/                      # Neural network architectures + checkpoint I/O
-│   ├── autoencoder.py           # Autoencoder (DCASE baseline)
-│   └── checkpoint.py            # load_from_checkpoint
-│
-├── training/                    # Training loop, config, experiment tracking
-│   ├── trainer.py               # PtTrainer — loop, checkpointing, early stopping
-│   ├── config.py                # TrainingConfig dataclass
-│   └── tracking.py              # ExperimentTracker protocol, NullTracker, WandbTracker
-│
-├── tracking/                    # Canonical tracker package (supersedes training/tracking.py)
-│   ├── base.py                  # ExperimentTracker protocol + NullTracker
-│   └── wandb.py                 # WandbTracker (optional wandb dependency)
-│
-├── inference/                   # Anomaly scoring pipeline
-│   ├── frame_scorer.py          # ReconstructionFrameScorer, MahalanobisFrameScorer
-│   ├── aggregation.py           # mean_score, max_score, percentile_score, AggregationFn
-│   ├── file_scorer.py           # FileScorer — frames → aggregated file score
-│   ├── detector.py              # AnomalyDetector + AnomalyResult
-│   └── threshold.py             # calibrate_threshold — derive threshold from train scores
+├── src/
+│   └── audio_processing/            # installable package (import root)
+│       ├── data/                    # Audio loading, framing, splitting, dataset
+│       │   ├── loader.py            # load_wav, find_wav_files, path parsers
+│       │   ├── framing.py           # frame_signal, count_frames
+│       │   ├── dataset.py           # AudioFrameDataset (PyTorch Dataset)
+│       │   └── splitting.py         # make_train_test_split, DataSplit
+│       │
+│       ├── features/                # Feature extraction
+│       │   ├── log_mel.py           # MelSpectrogramTransform
+│       │   └── hpss.py              # HpssTransform, hpss_harmonic, hpss_percussive
+│       │
+│       ├── models/                  # Neural network architectures + checkpoint I/O
+│       │   ├── autoencoder.py       # Autoencoder (DCASE baseline)
+│       │   └── checkpoint.py        # load_from_checkpoint
+│       │
+│       ├── training/                # Training loop, config, experiment tracking
+│       │   ├── trainer.py           # PtTrainer — loop, checkpointing, early stopping
+│       │   ├── config.py            # TrainingConfig dataclass
+│       │   └── tracking.py          # ExperimentTracker protocol, NullTracker, WandbTracker
+│       │
+│       ├── tracking/                # Canonical tracker package (supersedes training/tracking.py)
+│       │   ├── base.py              # ExperimentTracker protocol + NullTracker
+│       │   └── wandb.py             # WandbTracker (optional wandb dependency)
+│       │
+│       ├── inference/               # Anomaly scoring pipeline
+│       │   ├── frame_scorer.py      # ReconstructionFrameScorer, MahalanobisFrameScorer
+│       │   ├── aggregation.py       # mean_score, max_score, percentile_score, AggregationFn
+│       │   ├── file_scorer.py       # FileScorer — frames → aggregated file score
+│       │   ├── detector.py          # AnomalyDetector + AnomalyResult
+│       │   └── threshold.py         # calibrate_threshold — derive threshold from train scores
+│       │
+│       ├── evaluation/              # Evaluator, metrics, labels, report
+│       ├── download/                # Dataset downloaders/preprocessors + registry
+│       └── utilities/               # Paths, device detection, ensure_data
 │
 ├── audio_data/                  # datasets (not committed to git)
 │   └── {machine_type}/          # fan, pump, slider, valve (+ gearbox for MIMII DUE)
@@ -212,7 +218,7 @@ audio_data/
 Loads a WAV file and returns an `AudioFile1D` dataclass containing the signal, sample rate, file path, and labels parsed from the MIMII directory structure.
 
 ```python
-from data import load_wav
+from audio_processing.data import load_wav
 
 audio = load_wav("audio_data/fan/id_00/normal/00000000.wav", target_samplerate=16_000)
 # audio.signal      → np.ndarray, shape (n_samples,)
@@ -226,7 +232,7 @@ audio = load_wav("audio_data/fan/id_00/normal/00000000.wav", target_samplerate=1
 Recursively discovers all WAV files under a directory, returned as a sorted list.
 
 ```python
-from data import find_wav_files
+from audio_processing.data import find_wav_files
 
 paths = find_wav_files("audio_data/fan/id_00/normal")
 ```
@@ -236,7 +242,7 @@ paths = find_wav_files("audio_data/fan/id_00/normal")
 Splits a 1-D signal into overlapping frames of shape `(n_frames, frame_length)`.
 
 ```python
-from data import frame_signal
+from audio_processing.data import frame_signal
 
 frames = frame_signal(audio.signal, frame_length=16_000, hop_length=8_000)
 # frames.shape → (n_frames, 16000)
@@ -247,8 +253,8 @@ frames = frame_signal(audio.signal, frame_length=16_000, hop_length=8_000)
 A `torch.utils.data.Dataset` that lazily loads and frames WAV files. Accepts an optional `transform` for feature extraction.
 
 ```python
-from data import AudioFrameDataset
-from features import MelSpectrogramTransform
+from audio_processing.data import AudioFrameDataset
+from audio_processing.features import MelSpectrogramTransform
 
 transform = MelSpectrogramTransform(sample_rate=16_000, n_fft=1024, hop_length=320, n_mels=64)
 
@@ -278,7 +284,7 @@ Splits a machine ID directory into train and test sets following the MIMII evalu
 - Remaining **normal** files → train set
 
 ```python
-from data import make_train_test_split
+from audio_processing.data import make_train_test_split
 
 split = make_train_test_split("audio_data/fan/id_00", seed=42)
 
@@ -297,7 +303,7 @@ split = make_train_test_split("audio_data/fan/id_00", seed=42)
 Converts a 1-D audio frame (`np.ndarray`) into a flattened log-mel spectrogram tensor (`torch.Tensor`) ready for autoencoder input.
 
 ```python
-from features import MelSpectrogramTransform
+from audio_processing.features import MelSpectrogramTransform
 
 transform = MelSpectrogramTransform(
     sample_rate=16_000,
@@ -324,7 +330,7 @@ n_features = n_mels × time_bins
 Optional pre-processing step that applies Harmonic-Percussive Source Separation (HPSS) via `librosa.effects.hpss` before feature extraction. Keeps either the harmonic or percussive component of the signal.
 
 ```python
-from features.hpss import HpssTransform, hpss_harmonic, hpss_percussive, make_hpss_transform
+from audio_processing.features.hpss import HpssTransform, hpss_harmonic, hpss_percussive, make_hpss_transform
 
 # Pre-built convenience callables
 clean = hpss_harmonic(signal)    # keep harmonic component
@@ -346,7 +352,7 @@ clean = transform(signal)        # np.ndarray → np.ndarray, same shape
 Restores weights from a checkpoint file written by `PtTrainer` and returns the model in `eval()` mode on the target device.
 
 ```python
-from models import Autoencoder, load_from_checkpoint
+from audio_processing.models import Autoencoder, load_from_checkpoint
 
 model = Autoencoder(input_dim=3264)
 model = load_from_checkpoint("checkpoints/best.pt", model, device="cpu")
@@ -362,7 +368,7 @@ model = load_from_checkpoint("checkpoints/best.pt", model, device="cpu")
 Wraps a trained model and computes a scalar MSE reconstruction error for every frame in a batch. The model is set to `eval()` on construction and never switched back.
 
 ```python
-from inference import FrameScorer
+from audio_processing.inference import FrameScorer
 
 scorer = FrameScorer(model, device="cpu")
 errors = scorer.score_batch(batch)   # Tensor, shape (batch_size,)
@@ -373,7 +379,7 @@ errors = scorer.score_batch(batch)   # Tensor, shape (batch_size,)
 Reduce a 1-D tensor of per-frame errors to a single file-level float. Any `Callable[[Tensor], float]` satisfies the `AggregationFn` type alias.
 
 ```python
-from inference import mean_score, max_score, percentile_score
+from audio_processing.inference import mean_score, max_score, percentile_score
 
 mean_score(errors)           # arithmetic mean
 max_score(errors)            # single most anomalous frame
@@ -385,7 +391,7 @@ percentile_score(95)(errors) # 95th-percentile (factory pattern)
 Orchestrates the full per-file pipeline: constructs an `AudioFrameDataset` from the file path (using the same framing parameters as training), collects frame errors from `FrameScorer`, and reduces them via an `AggregationFn`.
 
 ```python
-from inference import FileScorer, mean_score
+from audio_processing.inference import FileScorer, mean_score
 
 file_scorer = FileScorer(
     frame_scorer=scorer,
@@ -408,7 +414,7 @@ scores = file_scorer.score_files(split.test_paths)       # list[float]
 Applies a fixed threshold to file-level scores. A score **strictly greater than** the threshold is flagged as anomalous.
 
 ```python
-from inference import AnomalyDetector
+from audio_processing.inference import AnomalyDetector
 
 detector = AnomalyDetector(threshold=0.015)
 
@@ -425,8 +431,8 @@ results = detector.detect_batch(scores, paths=split.test_paths)
 ```python
 from torch.utils.data import DataLoader
 
-from data import AudioFrameDataset, make_train_test_split
-from features import MelSpectrogramTransform
+from audio_processing.data import AudioFrameDataset, make_train_test_split
+from audio_processing.features import MelSpectrogramTransform
 
 # 1. Split files
 split = make_train_test_split("audio_data/fan/id_00", seed=42)
@@ -479,13 +485,13 @@ labels = np.array(
 ### End-to-end: score test files and detect anomalies
 
 ```python
-from models import Autoencoder, load_from_checkpoint
-from features import MelSpectrogramTransform
-from inference import (
+from audio_processing.models import Autoencoder, load_from_checkpoint
+from audio_processing.features import MelSpectrogramTransform
+from audio_processing.inference import (
     FrameScorer, FileScorer, AnomalyDetector,
     mean_score, percentile_score,
 )
-from data import make_train_test_split
+from audio_processing.data import make_train_test_split
 
 # 1. Restore the trained model
 model = Autoencoder(input_dim=3264)
