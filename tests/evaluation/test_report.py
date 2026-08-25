@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from evaluation.metrics import EvaluationResult
-from evaluation.report import format_report, print_report
+from audio_processing.evaluation.metrics import EvaluationResult
+from audio_processing.evaluation.report import format_report, print_report
 
 
 # ── fixtures ──────────────────────────────────────────────────────────────

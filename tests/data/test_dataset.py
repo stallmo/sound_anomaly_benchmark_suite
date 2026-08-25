@@ -7,8 +7,8 @@ import pytest
 import torch
 from torch.utils.data import DataLoader
 
-from data.dataset import AudioFrameDataset, MelFrameDataset
-from data.framing import count_frames
+from audio_processing.data.dataset import AudioFrameDataset, MelFrameDataset
+from audio_processing.data.framing import count_frames
 from tests.conftest import SAMPLE_RATE, N_SAMPLES
 
 # ── test-local constants ──────────────────────────────────────────────────
@@ -138,7 +138,7 @@ MEL_INPUT_DIM = N_FRAMES * MEL_N_MELS  # 80
 
 @pytest.fixture()
 def mel_dataset(mimii_dir) -> MelFrameDataset:
-    from data.loader import find_wav_files
+    from audio_processing.data.loader import find_wav_files
     paths = find_wav_files(mimii_dir)
     return MelFrameDataset(
         file_paths=paths,
@@ -204,7 +204,7 @@ class TestMelFrameDatasetGetItem:
 class TestMelFrameDatasetContextHop:
 
     def test_larger_context_hop_reduces_window_count(self, mimii_dir):
-        from data.loader import find_wav_files
+        from audio_processing.data.loader import find_wav_files
         paths = find_wav_files(mimii_dir)
         ds_hop1 = MelFrameDataset(paths, n_mels=MEL_N_MELS, mel_hop_length=MEL_HOP,
                                   n_frames=N_FRAMES, context_hop=1)

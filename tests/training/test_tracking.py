@@ -7,7 +7,7 @@ from typing import Any
 
 import pytest
 
-from training.tracking import ExperimentTracker, NullTracker
+from audio_processing.training.tracking import ExperimentTracker, NullTracker
 
 
 # ── spy tracker — used across both test modules ───────────────────────────
@@ -92,7 +92,7 @@ class TestWandbTrackerImportError:
 
         monkeypatch.setattr(builtins, "__import__", mock_import)
 
-        from training.tracking import WandbTracker
+        from audio_processing.training.tracking import WandbTracker
         with pytest.raises(ImportError, match="wandb is not installed"):
             WandbTracker(project="test")
 

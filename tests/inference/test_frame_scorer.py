@@ -7,8 +7,8 @@ import torch
 from torch import Tensor
 from torch.utils.data import DataLoader, TensorDataset
 
-from models.autoencoder import Autoencoder
-from inference.frame_scorer import FrameScorer, ReconstructionFrameScorer, MahalanobisFrameScorer
+from audio_processing.models.autoencoder import Autoencoder
+from audio_processing.inference.frame_scorer import FrameScorer, ReconstructionFrameScorer, MahalanobisFrameScorer
 
 # ── test-local constants ──────────────────────────────────────────────────
 INPUT_DIM = 32

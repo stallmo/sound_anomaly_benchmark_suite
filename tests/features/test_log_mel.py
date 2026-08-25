@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 import torch
 
-from features.log_mel import MelSpectrogramTransform, compute_log_mel_spectrogram
+from audio_processing.features.log_mel import MelSpectrogramTransform, compute_log_mel_spectrogram
 from tests.conftest import N_SAMPLES, SAMPLE_RATE
 
 # ── test-local constants ──────────────────────────────────────────────────

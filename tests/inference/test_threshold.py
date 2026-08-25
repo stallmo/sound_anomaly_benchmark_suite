@@ -7,7 +7,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from inference.threshold import calibrate_threshold
+from audio_processing.inference.threshold import calibrate_threshold
 
 
 # ── fixtures ──────────────────────────────────────────────────────────────

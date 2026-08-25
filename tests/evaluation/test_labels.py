@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from evaluation.labels import extract_labels
+from audio_processing.evaluation.labels import extract_labels
 
 
 # ── helpers ───────────────────────────────────────────────────────────────

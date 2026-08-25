@@ -33,20 +33,20 @@ from pathlib import Path
 import torch
 from torch.utils.data import DataLoader
 
-from data import DataSplit, MelFrameDataset, make_combined_split, make_train_test_split
-from evaluation.labels import extract_labels
-from evaluation.metrics import compute_metrics
-from evaluation.report import print_report
-from inference.file_scorer import FileScorer, make_mel_dataset_factory
-from inference.frame_scorer import MahalanobisFrameScorer, ReconstructionFrameScorer
-from inference.threshold import calibrate_threshold
-from models.autoencoder import Autoencoder
-from models.checkpoint import load_from_checkpoint
-from tracking.wandb import WandbTracker
-from training.config import TrainingConfig
-from training.trainer import PtTrainer
-from utilities import DEFAULT_DATA_DIR, DEFAULT_MEL_CACHE_DIR, detect_device, ensure_data, entity_dir
-from features.hpss import HpssTransform, resolve_signal_transform
+from audio_processing.data import DataSplit, MelFrameDataset, make_combined_split, make_train_test_split
+from audio_processing.evaluation.labels import extract_labels
+from audio_processing.evaluation.metrics import compute_metrics
+from audio_processing.evaluation.report import print_report
+from audio_processing.inference.file_scorer import FileScorer, make_mel_dataset_factory
+from audio_processing.inference.frame_scorer import MahalanobisFrameScorer, ReconstructionFrameScorer
+from audio_processing.inference.threshold import calibrate_threshold
+from audio_processing.models.autoencoder import Autoencoder
+from audio_processing.models.checkpoint import load_from_checkpoint
+from audio_processing.tracking.wandb import WandbTracker
+from audio_processing.training.config import TrainingConfig
+from audio_processing.training.trainer import PtTrainer
+from audio_processing.utilities import DEFAULT_DATA_DIR, DEFAULT_MEL_CACHE_DIR, detect_device, ensure_data, entity_dir
+from audio_processing.features.hpss import HpssTransform, resolve_signal_transform
 
 
 # ── CLI ───────────────────────────────────────────────────────────────────
@@ -192,7 +192,7 @@ def _build_parser() -> argparse.ArgumentParser:
         help=(
             "HPSS component to use as the training signal: 'harmonic', 'percussive', "
             "or 'none' to disable HPSS.  When omitted (or empty) the entity-type "
-            "default from features.hpss.ENTITY_TYPE_COMPONENT is used as a fallback."
+            "default from audio_processing.features.hpss.ENTITY_TYPE_COMPONENT is used as a fallback."
         ),
     )
 

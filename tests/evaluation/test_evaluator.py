@@ -7,9 +7,9 @@ from unittest.mock import MagicMock, call
 
 import pytest
 
-from evaluation.evaluator import Evaluator
-from evaluation.metrics import EvaluationResult
-from tracking.base import NullTracker
+from audio_processing.evaluation.evaluator import Evaluator
+from audio_processing.evaluation.metrics import EvaluationResult
+from audio_processing.tracking.base import NullTracker
 
 
 # ── helpers ───────────────────────────────────────────────────────────────
